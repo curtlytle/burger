@@ -8,6 +8,18 @@ li {
   font-weight: bold;
 }
 
+.mainrow {
+  background-color: #f8efc0;
+}
+
+.burger {
+  padding: 2px
+}
+
+.burgername {
+  background-color: white;
+}
+
 .create-update-form {
   padding: 5px;
   margin: 5px;
