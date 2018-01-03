@@ -1,13 +1,27 @@
 <div class="row burger">
-    <div class="col-md-7 burgername">
+    {{#if devoured}}
+    <div class="col-md-7 eatburger">
         {{burger_name}}
     </div>
 
     <div class="col-md-4">
         <button type="button" class="change-devoured btn btn-primary" data-id="{{id}}" data-newdevoured="{{devoured}}">
-            {{#if devoured}}Devour It!{{else}}UN DEVOUR!{{/if}}
+            Devour It!
         </button>
     </div>
     <div class="col-md-1">
     </div>
+    {{else}}
+        <div class="col-md-7 burgereaten">
+            {{id}}. {{burger_name}}
+        </div>
+
+        <div class="col-md-4">
+            <button type="button" class="change-devoured btn btn-primary" data-id="{{id}}" data-newdevoured="{{devoured}}">
+                Put Back!
+            </button>
+        </div>
+        <div class="col-md-1">
+        </div>
+    {{/if}}
 </div>
