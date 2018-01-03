@@ -12,6 +12,7 @@ var db_config = {
 var connection;
 
 function handleDisconnect() {
+
     connection = mysql.createConnection(db_config); // Recreate the connection, since
                                                     // the old one cannot be reused.
 
@@ -36,3 +37,5 @@ handleDisconnect();
 
 // Export connection for our ORM to use.
 module.exports = connection;
+
+
