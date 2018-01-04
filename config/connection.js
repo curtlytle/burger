@@ -3,10 +3,10 @@ var mysql = require("mysql");
 
 var db_config = {
     port: 3306,
-    host: "us-cdbr-iron-east-05.cleardb.net",
-    user: "be91a1c5fb23a9",
-    password: "bb73c239",
-    database: "heroku_787ba5070a1b222"
+    host: "y06qcehxdtkegbeb.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+    user: "a2refqsrcxmllsx0",
+    password: "rj4bxidfcphe5x5s",
+    database: "tkks00m55hwc3ush"
 };
 
 var connection;
