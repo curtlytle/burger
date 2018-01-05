@@ -1,5 +1,5 @@
 // Import MySQL connection.
-var connection = require("../config/connection.js");
+var pool = require("../config/connection.js");
 
 // Helper function for SQL syntax.
 // Let's say we want to pass 3 values into the mySQL query.
@@ -42,65 +42,73 @@ function objToSql(ob) {
 // Object for all our SQL statement functions.
 var orm = {
     selectAll: function (tableInput, cb) {
-        var queryString = "SELECT * FROM " + tableInput + ";";
-        connection.query(queryString, function (err, result) {
-            if (err) {
-                throw err;
-            }
-            cb(result);
+        pool.getConnection(function (error, connection) {
+            // connected! (unless `err` is setvar queryString = "SELECT * FROM " + tableInput + ";";
+            var queryString = "SELECT * FROM " + tableInput + ";";
+            connection.query(queryString, function (err, result) {
+                connection.release();
+                if (err) {
+                    throw err;
+                }
+                cb(result);
+            });
         });
     },
     insertOne: function (table, cols, vals, cb) {
-        var queryString = "INSERT INTO " + table;
+        pool.getConnection(function (error, connection) {
+            var queryString = "INSERT INTO " + table;
 
-        queryString += " (";
-        queryString += cols.toString();
-        queryString += ") ";
-        queryString += "VALUES (";
-        queryString += printQuestionMarks(vals.length);
-        queryString += ") ";
+            queryString += " (";
+            queryString += cols.toString();
+            queryString += ") ";
+            queryString += "VALUES (";
+            queryString += printQuestionMarks(vals.length);
+            queryString += ") ";
 
-        //console.log(queryString);
+            //console.log(queryString);
+            connection.query(queryString, vals, function (err, result) {
+                connection.release();
+                if (err) {
+                    throw err;
+                }
 
-        connection.query(queryString, vals, function (err, result) {
-            if (err) {
-                throw err;
-            }
-
-            cb(result);
+                cb(result);
+            });
         });
     },
     delete: function (table, id) {
-        var queryString = "DELETE FROM " + table;
+        pool.getConnection(function (error, connection) {
+            var queryString = "DELETE FROM " + table;
+            queryString += " WHERE ID = ?";
+            //console.log(queryString);
 
-        queryString += " WHERE ID = ?";
+            connection.query(queryString, id, function (err, result) {
+                connection.release();
+                if (err) {
+                    throw err;
+                }
 
-        //console.log(queryString);
-
-        connection.query(queryString, id, function (err, result) {
-            if (err) {
-                throw err;
-            }
-
-            cb(result);
+                cb(result);
+            });
         });
     },
     // An example of objColVals would be {name: panther, sleepy: true}
     updateOne: function (table, objColVals, condition, cb) {
-        var queryString = "UPDATE " + table;
+        pool.getConnection(function (error, connection) {
+            var queryString = "UPDATE " + table;
+            queryString += " SET ";
+            queryString += objToSql(objColVals);
+            queryString += " WHERE ";
+            queryString += condition;
 
-        queryString += " SET ";
-        queryString += objToSql(objColVals);
-        queryString += " WHERE ";
-        queryString += condition;
+            connection.query(queryString, function (err, result) {
+                connection.release();
+                if (err) {
+                    throw err;
+                }
 
-        //console.log(queryString);
-        connection.query(queryString, function (err, result) {
-            if (err) {
-                throw err;
-            }
-
-            cb(result);
+                cb(result);
+            });
         });
     }
 };
